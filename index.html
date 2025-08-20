@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Moje Ulubione Miejsca</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;          /* układ poziomy */
+      height: 100vh;          /* pełna wysokość ekranu */
+    }
+
+    #map {
+      flex: 1;                /* lewa połowa */
+      min-width: 50%;
+    }
+
+    #info {
+      flex: 1;                /* prawa połowa */
+      padding: 20px;
+      overflow-y: auto;
+      background: #f8f8f8;
+      border-left: 2px solid #ccc;
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <div id="info">
+    <h1>Instrukcja</h1>
+    <p>Kliknij na marker, aby zobaczyć dane miejsca tutaj 👇</p>
+    <div id="details">Brak wybranego miejsca.</div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // Inicjalizacja mapy
+    const map = L.map('map').setView([52.2297, 21.0122], 12);
+
+    // Warstwa kafelkowa
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    // Przykładowe miejsca
+    const places = [
+      { name: "Pałac Kultury i Nauki", coords: [52.2318, 21.0069], desc: "Symbol Warszawy" },
+      { name: "Łazienki Królewskie", coords: [52.215, 21.035], desc: "Piękny park z pałacem" }
+    ];
+
+    // Dodawanie markerów
+    places.forEach(place => {
+      const marker = L.marker(place.coords).addTo(map);
+      marker.on('click', () => {
+        document.getElementById("details").innerHTML = `
+          <h2>${place.name}</h2>
+          <p>${place.desc}</p>
+          <p><b>Współrzędne:</b> ${place.coords[0]}, ${place.coords[1]}</p>
+        `;
+      });
+    });
+  </script>
+</body>
+</html>
